@@ -34,6 +34,8 @@ public class Chat extends Activity {
 	private final static String TAG = Chat.class.getSimpleName();
 
 	public static final String EXTRAS_DEVICE = "EXTRAS_DEVICE";
+  private static final String KEY_TV_STATE = "KEY_TV_STATE";
+
 	private TextView tv = null;
 	private EditText et = null;
 	private Button btn = null;
@@ -188,7 +190,32 @@ public class Chat extends Activity {
 		unregisterReceiver(mGattUpdateReceiver);
 	}
 
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
 
+    // Save the current logs into the bundle
+    CharSequence currentLogs = tv.getText();
+    Log.d(TAG, "Saving " + currentLogs.length() + " characters from TextView");
+    outState.putCharSequence(KEY_TV_STATE, currentLogs);
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    if(savedInstanceState == null) {
+      return;
+    }
+
+    // Restore the logs from the bundle
+    CharSequence previousLogs = savedInstanceState.getCharSequence(KEY_TV_STATE);
+    if(previousLogs == null) {
+      return;
+    }
+
+    Log.d(TAG, "Restoring " + previousLogs.length() + " characters from Bundle");
+    tv.setText(previousLogs);
+  }
 
 	private void displayData(byte[] byteArray) {
 
