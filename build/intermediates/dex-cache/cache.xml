@@ -9,6 +9,20 @@
         <dex dex="C:\Users\Jay\AndroidStudioProjects\Chat1\app\build\intermediates\pre-dexed\debug\classes-ca780e400c20e201ff7c8ea630d8850114ef0a9b.jar" />
     </item>
     <item
+        jar="C:\Users\Jay\Desktop\Chat1\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\Jay\Desktop\Chat1\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-a2cae1bf258e1828c8cc02f1f6f9319bf07b3f4c.jar" />
+    </item>
+    <item
+        jar="C:\Users\Jay\Desktop\Chat1\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\Jay\Desktop\Chat1\app\build\intermediates\pre-dexed\debug\classes-f9de0fcbe18dc303600a4e8c8095f1426142f751.jar" />
+    </item>
+    <item
         jar="C:\Users\Jay\AndroidStudioProjects\Chat1\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"

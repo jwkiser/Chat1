@@ -1,5 +1,6 @@
 package com.redbear.chat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -16,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -26,6 +28,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 public class Main extends Activity {
 	private BluetoothAdapter mBluetoothAdapter;
 	private static final int REQUEST_ENABLE_BT = 1;
@@ -34,11 +38,24 @@ public class Main extends Activity {
 	public static List<BluetoothDevice> mDevices = new ArrayList<BluetoothDevice>();
 	public static Main instance = null;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.main);
+
+        TextView tvsymptom = (TextView) findViewById(R.id.configSym);
+        TextView tvYellow = (TextView) findViewById(R.id.configYellow);
+        TextView tvBlue = (TextView) findViewById(R.id.configBlue);
+
+        SharedPreferences prefs = getSharedPreferences("button_settings",
+                MODE_PRIVATE);
+        tvBlue.setText(prefs.getString("bluepref", "None"));
+        tvsymptom.setText(prefs.getString("redpref", "None"));
+        tvYellow.setText(prefs.getString("yellowpref", "None"));
+
+
 
        /* Calendar c = Calendar.getInstance();
 
@@ -51,6 +68,7 @@ public class Main extends Activity {
 
 
         tv3.setText(sDate);*/
+
 
 
 
@@ -137,6 +155,8 @@ public class Main extends Activity {
 		// 娉ㄦ��姝ゅ��瑕���惧��show涔���� ������浼���ュ��甯�
 		mDialog.setContentView(layout);
 	}
+
+
 
 	private void scanLeDevice() {
 		new Thread() {

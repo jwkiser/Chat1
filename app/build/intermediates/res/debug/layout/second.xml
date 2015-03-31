@@ -21,45 +21,41 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80dp"
-                android:layout_above="@+id/btn_settings"
-                android:layout_alignParentStart="true" />
-
-            <Button
-                android:id="@+id/send"
-                style="@style/button_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/red_button"
-                android:text="Send"
-                android:layout_above="@+id/btn_settings"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="30dp" />
-
             <Button
                 android:layout_width="121dp"
                 android:layout_height="120dp"
-                android:text="Settings"
                 android:id="@+id/btn_settings"
                 android:layout_gravity="bottom"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/settings" />
 
             <Button
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_time"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="false"
+                android:background="@drawable/clock"
+                android:layout_alignTop="@+id/btn_settings"
+                android:layout_alignParentStart="true" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Sync Time"
-                android:id="@+id/btn_time"
-                android:layout_alignBottom="@+id/btn_settings"
+                android:id="@+id/textView9"
+                android:layout_above="@+id/btn_time"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/editText" />
+                android:layout_alignEnd="@+id/btn_time"
+                android:textSize="20dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:textStyle="bold"
+                android:textIsSelectable="false" />
 
         </RelativeLayout>
 
     </LinearLayout>
 
-</LinearLayout><!-- From: file:/C:/Users/Jay/AndroidStudioProjects/Chat1/app/src/main/res/layout/second.xml -->
+</LinearLayout><!-- From: file:/C:/Users/Jay/Desktop/Chat1/app/src/main/res/layout/second.xml -->

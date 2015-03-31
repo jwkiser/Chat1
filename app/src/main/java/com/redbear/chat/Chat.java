@@ -17,6 +17,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.method.ScrollingMovementMethod;
@@ -37,14 +39,18 @@ public class Chat extends Activity {
   private static final String KEY_TV_STATE = "KEY_TV_STATE";
 
 	private TextView tv = null;
-	private EditText et = null;
-	private Button btn = null;
+	//private EditText et = null;
+	//private Button btn = null;
     private Button settingsbtn = null;
     private Button timebtn = null;
 	private String mDeviceName;
 	public static String mDeviceAddress;
 	private RBLService mBluetoothLeService;
 	public static Map<UUID, BluetoothGattCharacteristic> map = new HashMap<UUID, BluetoothGattCharacteristic>();
+    private String redString;
+    private String greenString;
+    private String yellowString;
+    private String blueString;
 
 
 
@@ -94,15 +100,16 @@ public class Chat extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second);
 
-
        	tv = (TextView) findViewById(R.id.textView);
 		tv.setMovementMethod(ScrollingMovementMethod.getInstance());
-		et = (EditText) findViewById(R.id.editText);
-		btn = (Button) findViewById(R.id.send);
         settingsbtn = (Button) findViewById(R.id.btn_settings);
         timebtn = (Button) findViewById(R.id.btn_time);
 
-		btn.setOnClickListener(new OnClickListener() {
+        //Send time to device
+        BluetoothGattCharacteristic characteristic = map
+                .get(RBLService.UUID_BLE_SHIELD_TX);
+
+		/*btn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -117,11 +124,11 @@ public class Chat extends Activity {
 					tx[i] = tmp[i - 1];
 				}*/
 
-               et.setText("");
+              /* et.setText("");
 
             }
 
-		});
+		});*/
 
         //Sync the time
         timebtn.setOnClickListener(new OnClickListener() {
@@ -138,6 +145,7 @@ public class Chat extends Activity {
 
                 characteristic.setValue(str);
                 mBluetoothLeService.writeCharacteristic(characteristic);
+                Toast.makeText(getApplicationContext(), "Time synced @ " + sDate, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -154,8 +162,8 @@ public class Chat extends Activity {
 		mDeviceAddress = intent.getStringExtra(Device.EXTRA_DEVICE_ADDRESS);
 		mDeviceName = intent.getStringExtra(Device.EXTRA_DEVICE_NAME);
 
-		getActionBar().setTitle(mDeviceName);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
 		Intent gattServiceIntent = new Intent(this, RBLService.class);
 		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -219,24 +227,37 @@ public class Chat extends Activity {
 
 	private void displayData(byte[] byteArray) {
 
+
 		if (byteArray != null) {
 			String data = new String(byteArray);
 
+            SharedPreferences prefs = getSharedPreferences("button_settings",
+                    MODE_PRIVATE);
+
+            redString = prefs.getString("redpref", "Symptom Stop");
+            greenString = prefs.getString("greenpref", "Symptom Start");
+            blueString = prefs.getString("bluepref", "Medication");
+            yellowString = prefs.getString("yellowpref", "Event");
+
             //Change strings via customization in "settings" page
-            if (data.endsWith("1")) {
-                data = data.substring(0, data.length() - 1) + "Stop";
+            if (data.endsWith("1")) {                               //Red Button
+                data = data.substring(0, data.length() - 1) + redString + " Stop";
+                tv.setTextColor(Color.RED);
             }
-            else if (data.endsWith("2")) {
-                data = data.substring(0, data.length() - 1) + "Event";
+            else if (data.endsWith("2")) {                          //Yellow Button
+                data = data.substring(0, data.length() - 1) + yellowString;
+                tv.setTextColor(Color.YELLOW);
             }
-            else if (data.endsWith("3")) {
-                data = data.substring(0, data.length() - 1) + "Start";
+            else if (data.endsWith("3")) {                          //Green Button
+                data = data.substring(0, data.length() - 1) + greenString + " Start";
+                tv.setTextColor(Color.GREEN);
             }
-            else if (data.endsWith("4")) {
-                data = data.substring(0, data.length() - 1) + "Meds";
+            else if (data.endsWith("4")) {                          //Blue Button
+                data = data.substring(0, data.length() - 1) + blueString;
+                tv.setTextColor(Color.BLUE);
             }
 
-			tv.append(data);
+			tv.append(data + System.getProperty("line.separator"));
 			// find the amount we need to scroll. This works by
 			// asking the TextView's internal layout for the position
 			// of the final line and then subtracting the TextView's height
