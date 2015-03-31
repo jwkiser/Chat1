@@ -14,9 +14,11 @@ import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.method.ScrollingMovementMethod;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +46,8 @@ public class Settings extends Activity {
     private RBLService mBluetoothLeService;
     private Map<UUID, BluetoothGattCharacteristic> map = new HashMap<UUID, BluetoothGattCharacteristic>();
 
-
+    private static final String PREFERENCE_FILENAME = "redbear";
+    private static final String PREFERENCE_REMINDER_PERIOD_MINUTES = "ReminderPeriod";
 
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -111,6 +115,16 @@ public class Settings extends Activity {
                 characteristic.setValue(str2);
                 mBluetoothLeService.writeCharacteristic(characteristic);
 
+                SharedPreferences preferences = Settings.this.getSharedPreferences(PREFERENCE_FILENAME, ContextWrapper.MODE_PRIVATE);
+                NumberPicker np = (NumberPicker) findViewById(R.id.numberPicker2);
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(PREFERENCE_REMINDER_PERIOD_MINUTES, np.getValue());
+                boolean success = editor.commit();
+
+                if(!success) {
+                  Log.e(TAG, "Error writing preferences to disk");
+                }
             }
 
         });
@@ -147,6 +161,16 @@ public class Settings extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+      SharedPreferences preferences = this.getSharedPreferences(PREFERENCE_FILENAME, ContextWrapper.MODE_PRIVATE);
+
+      // Default to 5 minutes
+      int reminderPeriod = preferences.getInt(PREFERENCE_REMINDER_PERIOD_MINUTES, 5);
+      NumberPicker np = (NumberPicker) findViewById(R.id.numberPicker2);
+      np.setValue(reminderPeriod);
     }
 
     @Override
